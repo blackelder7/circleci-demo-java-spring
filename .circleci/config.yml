@@ -56,7 +56,13 @@ jobs:
             fi
       # This will be empty for all nodes except the first one
       - store_artifacts:
-          path: build/libs
+          path: /home/circleci/project/build/libs
+      - deploy:
+          name: Deploy Over SSH
+          command: "scp -o StrictHostKeyChecking=no -r /home/circleci/project/build/libs/* isb@52.141.7.8:/home/isb/server"
+      - run:
+          name: Server Restart
+          command: ssh isb@52.141.7.8 "sh /home/isb/server/restart.sh"
 workflows:
   version: 2
   workflow:
